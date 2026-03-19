@@ -1,0 +1,9 @@
+    /.md
+**/.csv
+/*.txt
+.gitignore
+.claspignore
+node_modules/
+package.json
+package-lock.json
+.git/
