@@ -1,8 +1,8 @@
 // main.gs
 
 /**
- * Procesa la hoja activa para sumar los valores de cada fila
- * y colocar el resultado en una nueva columna llamada "SUMATORIA".
+ * Procesa la hoja activa para sumar los valores de cada fila,
+ * ignorando la columna 'ID' y colocando el resultado en 'SUMATORIA'.
  */
 function realizarSumatoria() {
   const sheet = SpreadsheetApp.getActiveSpreadsheet().getActiveSheet();
@@ -11,9 +11,12 @@ function realizarSumatoria() {
   if (data.length < 1) return; // Hoja vacía
 
   const headers = data[0];
+  
+  // Identificamos los índices de las columnas especiales
+  const idColIndex = headers.findIndex(h => h.toString().toUpperCase() === "ID");
   let sumatoriaColIndex = headers.indexOf("SUMATORIA");
 
-  // Si no existe la columna, la creamos al final
+  // Si no existe la columna SUMATORIA, la creamos al final
   if (sumatoriaColIndex === -1) {
     sumatoriaColIndex = headers.length;
     sheet.getRange(1, sumatoriaColIndex + 1).setValue("SUMATORIA")
@@ -27,20 +30,23 @@ function realizarSumatoria() {
   for (let i = 1; i < data.length; i++) {
     let filaSuma = 0;
     for (let j = 0; j < data[i].length; j++) {
-      // Sumamos solo si es un número y no es la propia columna de sumatoria
-      if (typeof data[i][j] === 'number' && j !== sumatoriaColIndex) {
+      // Condiciones para sumar:
+      // 1. Debe ser un número.
+      // 2. No debe ser la columna 'ID'.
+      // 3. No debe ser la propia columna 'SUMATORIA'.
+      if (typeof data[i][j] === 'number' && j !== idColIndex && j !== sumatoriaColIndex) {
         filaSuma += data[i][j];
       }
     }
     resultados.push([filaSuma]);
   }
 
-  // Escribimos todos los resultados de una sola vez por eficiencia
+  // Escribimos todos los resultados de una sola vez
   if (resultados.length > 0) {
     sheet.getRange(2, sumatoriaColIndex + 1, resultados.length, 1).setValues(resultados);
   }
   
-  SpreadsheetApp.getUi().alert("¡Sumatoria completada con éxito!");
+  SpreadsheetApp.getUi().alert("¡Sumatoria calculada (ignorando ID)! ");
 }
 
 /**
