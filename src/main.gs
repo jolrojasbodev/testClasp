@@ -46,7 +46,7 @@ function realizarSumatoria() {
     sheet.getRange(2, sumatoriaColIndex + 1, resultados.length, 1).setValues(resultados);
   }
   
-  SpreadsheetApp.getUi().alert("¡Sumatoria calculada (ignorando ID)! ");
+  SpreadsheetApp.getUi().alert("¡Sumatoria calculada (ignorando ID)!");
 }
 
 /**
